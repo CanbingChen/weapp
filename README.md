@@ -13,6 +13,10 @@
 ### 1.2 VXML模板文件
 与html文件相似，为描述当前这个页面的结构。小程序封装了一些常用的组件，可以直接使用，常用组件包括文本，按钮，单选框和地图等[点我跳转](https://mp.weixin.qq.com/debug/wxadoc/dev/component/)
 VXML中不支持html中的获取节点方法，使用小程序封装的方法进行获取[点我跳转](https://mp.weixin.qq.com/debug/wxadoc/dev/api/wxml-nodes-info.html#wxcreateselectorquery)
+支持的富文本标签,通过使用<rich-text>[标签列表](https://mp.weixin.qq.com/debug/wxadoc/dev/component/rich-text.html)
+#### 1.2.1 需要注意的组件
+1. image组件，图片组件模式有13种，4种缩放，9种裁剪方式，支持图片懒加载。
+2. camera相机组件，需要用户授权的组件.
 ### 1.3 WXSS 样式
 样式文件，语法与常用css基本一致，但其中还是有几点不同:
 1. 新增尺寸单位rpx
@@ -53,7 +57,176 @@ VXML中不支持html中的获取节点方法，使用小程序封装的方法进
 11. 用户截屏时间监听
 12. 控制手机振动，nfc和wifi。
 
-### 4.2 工具
+### 4.2 自定义组件
+从小程序基础库版本 1.6.3 开始，小程序支持组件化变成。
+
+#### 4.2.1 自定义组件的结构与页面一致，同时具备json wxml wxss js 4个文件，需要注意以下几点：
+1. 编写组件，需要在组件json文件中进行组件声明，
+```
+{
+  "component": true
+}
+```
+2. 编写模板，样式以及逻辑处理文件，声明组件时，使用Component()注册组件，而不是页面中的Page。
+```
+Component({
+  properties: {
+    // 这里定义了innerText属性，属性值可以在组件使用时指定
+    innerText: {
+      type: String,
+      value: 'default value',
+    }
+  },
+  data: {
+    // 这里是一些组件内部数据
+    someData: {}
+  },
+  methods: {
+    // 这里是一个自定义方法
+    customMethod: function(){}
+  }
+})
+```
+3. 使用组件的时候，需要在页面的配置json中进行引用声明，需要提供标签名和对应的文件路径(所有的路径都为相对路径)
+```
+{
+  "usingComponents": {
+    "component-tag-name": "path/to/the/custom/component"
+  }
+}
+```
+页面中使用组件样例(属性在标签中为短横线连接，js中为小驼峰)
+```
+<view>
+  <!-- 以下是对一个自定义组件的引用 -->
+  <component-tag-name inner-text="Some text"></component-tag-name>
+</view>
+```
+
+### 4.2.2 组件中的slot子节点
+1. 组件模板中可以提供一个 <slot> 节点，用于承载组件引用时提供的子节点
+代码样例
+```
+<!-- 组件模板 -->
+<view class="wrapper">
+  <view>这里是组件的内部节点</view>
+  <slot></slot>
+</view>
+```
+```
+<!-- 引用组件的页面模版 -->
+<view>
+  <component-tag-name>
+    <!-- 这部分内容将被放置在组件 <slot> 的位置上 -->
+    <view>这里是插入到组件slot中的内容</view>
+  </component-tag-name>
+</view>
+```
+2. 默认情况下，一个组件的wxml中只能有一个slot。需要使用多slot时，可以在组件js中声明启用，在这个组件的wxml中使用多个slot，以不同的 name 来区分
+```
+Component({
+  options: {
+    multipleSlots: true // 在组件定义时的选项中启用多slot支持
+  },
+})
+```
+```
+<!-- 组件模板 -->
+<view class="wrapper">
+  <slot name="before"></slot>
+  <view>这里是组件的内部细节</view>
+  <slot name="after"></slot>
+</view>
+```
+```
+<view>
+  <component-tag-name>
+    <!-- 这部分内容将被放置在组件 <slot name="before"> 的位置上 -->
+    <view slot="before">这里是插入到组件slot name="before"中的内容</view>
+    <!-- 这部分内容将被放置在组件 <slot name="after"> 的位置上 -->
+    <view slot="after">这里是插入到组件slot name="after"中的内容</view>
+  </component-tag-name>
+</view>
+```
+3. 组件生命周期函数
+  * created,在组件实例进入页面节点树时执行,不能调用 setData
+  * attached 在组件实例进入页面节点树时执行
+  * ready 在组件布局完成后执行
+  * moved 在组件实例被移动到节点树另一个位置时执行
+  * detached 在组件实例被从页面节点树移除时执行
+4. behaviors-用于组件间代码共享的特性
+  * 每个 behavior 可以包含一组属性、数据、生命周期函数和方法，组件引用它时，它的属性、数据和方法会被合并到组件中，生命周期函数也会在对应时机被调用。每个组件可以引用多个 behavior 。 behavior 也可以引用其他 behavior。
+  * behavior 需要使用 Behavior() 构造器定义(结构与一般组件相同，只是构造器不同)。
+  ```
+  module.exports = Behavior({
+  behaviors: [],
+  properties: {
+    myBehaviorProperty: {
+      type: String
+    }
+  },
+  data: {
+    myBehaviorData: {}
+  },
+  attached: function(){},
+  methods: {
+    myBehaviorMethod: function(){}
+  }
+})
+  ```
+  在behaviors数组中列出需要的behavior就行。
+  * 如果有同名的属性或方法，组件本身的属性或方法会覆盖 behavior 中的属性或方法，如果引用了多个 behavior ，在定义段中靠后 behavior 中的属性或方法会覆盖靠前的属性或方法
+  * 如果有同名的数据字段，如果数据是对象类型，会进行对象合并，如果是非对象类型则会进行相互覆盖
+  * 生命周期函数不会相互覆盖，而是在对应触发时机被逐个调用。如果同一个 behavior 被一个组件多次引用，它定义的生命周期函数只会被执行一次。
+5. 组件间通信-relations
+  * 通过在组件中定义关系，相互影响，关系类别为parent，child，ancestor，descendant。
+  ```
+  Component({
+  relations: {
+    './custom-li': {
+      type: 'child', // 关联的目标节点应为子节点
+      linked: function(target) {
+        // 每次有custom-li被插入时执行，target是该节点实例对象，触发在该节点attached生命周期之后
+      },
+      linkChanged: function(target) {
+        // 每次有custom-li被移动后执行，target是该节点实例对象，触发在该节点moved生命周期之后
+      },
+      unlinked: function(target) {
+        // 每次有custom-li被移除时执行，target是该节点实例对象，触发在该节点detached生命周期之后
+      }
+    }
+  },
+})
+  ```
+  在组件中也需要告知父级组件关系
+  ```
+  Component({
+  relations: {
+    './custom-ul': {
+      type: 'parent', // 关联的目标节点应为父节点
+      linked: function(target) {
+        // 每次被插入到custom-ul时执行，target是custom-ul节点实例对象，触发在attached生命周期之后
+      },
+      linkChanged: function(target) {
+        // 每次被移动后执行，target是custom-ul节点实例对象，触发在moved生命周期之后
+      },
+      unlinked: function(target) {
+        // 每次被移除时执行，target是custom-ul节点实例对象，触发在detached生命周期之后
+      }
+    }
+  }
+})
+  ```
+
+
+#### Tips
+1. WXML节点标签名只能是小写字母、中划线和下划线的组合，所以自定义组件的标签名也只能包含这些字符
+2. 自定义组件也是可以引用自定义组件的，引用方法类似于页面引用自定义组件的方式
+3. 自定义组件和使用自定义组件的页面所在项目根目录名不能以“wx-”为前缀，否则会报错
+4. 旧版本的基础库不支持自定义组件，此时，引用自定义组件的节点会变为默认的空节点
+5. 属性获取可通过data进行获取，所有属性名与data字段都不能冲突
+
+### 4.3 工具
 小程序上传代码后支持预览和体验功能，有两种方式，一种是后台扫描二维码，而另一种则为使用小程序开发助手。当然所有的前提则为你个人微信号对于这个小程序是有权限的。
 
 ## 小知识点
