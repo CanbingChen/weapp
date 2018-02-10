@@ -1,0 +1,42 @@
+<view class="controler">
+    <view>
+      <text bindtap="radomPlay" >手机品牌</text>
+      <text bindtap="radomPlay" >{{systemInfo.brand}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >手机型号</text>
+      <text bindtap="radomPlay" >{{systemInfo.model}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >设备像素比</text>
+      <text bindtap="radomPlay" >{{systemInfo.pixelRatio}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >屏幕宽度</text>
+      <text bindtap="radomPlay" >{{systemInfo.screenWidth}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >屏幕高度</text>
+      <text bindtap="radomPlay" >{{systemInfo.screenHeight}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >可使用窗口宽度</text>
+      <text bindtap="radomPlay" >{{systemInfo.windowWidth}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >微信设置的语言</text>
+      <text bindtap="radomPlay" >{{systemInfo.language}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >微信版本号</text>
+      <text bindtap="radomPlay" >{{systemInfo.version}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >操作系统版本</text>
+      <text bindtap="radomPlay" >{{systemInfo.system}}</text>
+    </view>
+    <view>
+      <text bindtap="radomPlay" >客户端基础库版本</text>
+      <text bindtap="radomPlay" >{{systemInfo.SDKVersion}}</text>
+    </view>
+</view>

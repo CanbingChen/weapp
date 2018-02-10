@@ -1,0 +1,50 @@
+{
+  "pages":[
+    "pages/map/map",
+    "pages/map/mapPath",
+    "pages/index/index",
+    "pages/music/music",
+    "pages/navigate/navigate",
+    "pages/github/github",
+    "pages/user_input/user_input",
+    "pages/plant/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color": "#9B9DB1",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [{
+      "pagePath": "pages/music/music",
+      "iconPath":"images/earphone.png",
+      "selectedIconPath":"images/earphone.png",
+      "text": "音乐"
+    },{
+      "pagePath": "pages/index/index",
+      "iconPath": "images/home.png",
+      "selectedIconPath": "images/home.png",
+      "text": "首页"
+    },{
+      "pagePath": "pages/user_input/user_input",
+      "iconPath": "images/book.png",
+      "selectedIconPath": "images/book.png",
+      "text": "用户输入"
+    },{
+      "pagePath": "pages/map/map",
+      "iconPath": "images/map.png",
+      "selectedIconPath": "images/map.png",
+      "text": "地理位置"
+    },{
+      "pagePath": "pages/plant/index",
+      "iconPath": "images/plant.png",
+      "selectedIconPath": "images/plant.png",
+      "text": "设备信息"
+    }]
+  }
+}

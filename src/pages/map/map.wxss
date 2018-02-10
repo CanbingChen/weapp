@@ -1,0 +1,34 @@
+
+.nav{
+  /* z-index: 10000; */
+  width: 100%;
+  /* position: absolute; */
+  top:0;
+  height: 30px;
+}
+.map-block{
+  position: relative;
+}
+/* .map-view map{
+  width: 100%;
+  height: 600rpx;
+} */
+.nav-but{
+  border: cadetblue 1px solid;
+  border-radius: 0px;
+  width: 25%;
+  text-align: center;  
+  line-height: 30px;
+  display: inline-flex;
+}
+.choose-place{
+  width: 100%;
+  /* z-index: 10; */
+  display: flex;
+  /* position: fixed; */
+  flex-direction: row;
+  justify-content: space-around;
+  /* align-content: space-around; */
+  /* bottom: 0; */
+  background-color: #ffffff;
+}

@@ -1,0 +1,24 @@
+<view>
+    <navigator url="navigate" hover-class="navigator-hover" bindtap="navigate">页面跳转测试</navigator>
+</view>
+<swiper indicator-dots="" autoplay="{{swiper.autoplay}}" interval="{{swiper.interval}}"  circular="">
+     <swiper-item wx:for="{{top5}}" >
+      <image bindtap="play" data-num="{{index}}" src="{{item.albumpic_small}}" class="slide-image"/>
+    </swiper-item>
+</swiper>
+<view class="controler">
+    <text bindtap="radomPlay" >随机播放</text>
+    <text bindtap="pauseMusic" >暂停</text>
+</view>
+  <view>
+  <text>音乐播放滚动条</text>
+  <slider min="{{silder.min}}" step="{{silder.step}}" max="{{silder.max}}"  value="{{silder.value}}" show-value="{{silder.showValue}}"/>
+</view>
+<view class="music-item" wx:for="{{musicList}}">
+    <image  bindtap="play" data-num="{{index}}" class=" img-block {{item.className}}" src="{{item.albumpic_small}}" ></image>
+    <view >
+        <text class="song-name">歌名{{item.songname}}</text>
+        <text class="singer-name">歌手名{{item.singername}}</text>       
+    </view>
+</view>
+ 

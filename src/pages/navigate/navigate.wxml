@@ -1,0 +1,3 @@
+<view>
+    <text>{{query}}最帅</text>
+</view>

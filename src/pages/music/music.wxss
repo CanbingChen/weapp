@@ -1,0 +1,46 @@
+.controler{
+    height: 50rpx;
+}
+text{
+    font-family:"微软雅黑";
+  font-size: 22rpx;
+}
+.music-item{
+    overflow: hidden;
+    border-bottom: 1rpx solid #848484;
+}
+@keyframes rotate {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.img-block{
+    width:100rpx;
+    height: 100rpx;
+    border-radius:50rpx;
+    float: left;
+    animation: rotate 4s linear infinite;
+}
+.img-block-paused{
+    animation-play-state:paused;
+}
+.img-block-play{
+    animation-play-state:running;
+}
+.singer-name{
+    display: block;
+}
+.slide-image{
+    width: 100%;
+}
+/*.classname{//为了尽可能兼容各个浏览器
+  -moz-animation: rotate 4s linear infinite;
+  -webkit-animation: rotate 4s linear infinite;
+  -o-animation: rotate 4s linear infinite;
+  -ms-animation: rotate 4s linear infinite;
+  
+}*/

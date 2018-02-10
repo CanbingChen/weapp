@@ -1,0 +1,22 @@
+<view class="map-block">
+ <view class="nav">
+        <button bindtap="search" data-type='酒店' class="nav-but">酒店</button>
+        <button bindtap="search" data-type='美食' class="nav-but">美食</button>
+        <button bindtap="search" data-type='书店' class="nav-but">书店</button>
+        <button bindtap="search" data-type='商场' class="nav-but">商场</button>
+    </view>
+    <view wx:if="{{placeData.title}}">
+  <block class="choose-place">
+  <text>{{placeData.title}}</text>
+  <text>{{placeData.address}}</text>
+  <block>
+  <text>{{placeData.telephone}}</text>
+  <button bindtap='callPhone' type="primary">拨打电话</button>
+  <button bindtap='goThere' type="primary">到此处去</button>
+  </block>
+  
+  </block>
+</view>
+<view class="map-view"> <map longitude="{{map.longitude}}" latitude="{{map.latitude}}" markers="{{map.markers}}" scale="{{map.scale}}" bindmarkertap='markertap' polyline="{{map.polyline}}" show-location style="width: 100%; height: {{height}}px;"/> </view>
+
+</view>
