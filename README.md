@@ -1,7 +1,7 @@
 # 微信小程序
 ## 1 项目结构
 ### 1.1 app.json
- app.json时小程序的全局配置，包括了小程序的所有页面路径、界面表现（设置页面背景，文字颜色）、网络超时时间、底部 tab（tabBar为对象，其中list表示展示的导航栏） 等。
+ app.json是小程序的全局配置，包括了小程序的所有页面路径、界面表现（设置页面背景，文字颜色）、网络超时时间、底部 tab（tabBar为对象，其中list表示展示的导航栏） 等。
 #### 1.1.1 pages
   接受一个数组，每一项都是字符串，来指定小程序由哪些页面组成，数组的第一项代表小程序的初始页面。小程序中新增/减少页面，都需要对 pages 数组进行修改（不需要添加文件后缀）。
 #### 1.1.2 window
@@ -12,11 +12,12 @@
 配置导航栏，tabBar为对象，list为具体展示导航配置，数据类型为数组，个数最少为2个，最多为5个。定位只能选择top和bottom。当导航定位为底部时，设置的图片文件路径有效果，对于选中与未选中图片展示，只能分别设定不同的图片路径实现。
 ### 1.2 VXML模板文件
 与html文件相似，为描述当前这个页面的结构。小程序封装了一些常用的组件，可以直接使用，常用组件包括文本，按钮，单选框和地图等[点我跳转](https://mp.weixin.qq.com/debug/wxadoc/dev/component/)
-VXML中不支持html中的获取节点方法，使用小程序封装的方法进行获取[点我跳转](https://mp.weixin.qq.com/debug/wxadoc/dev/api/wxml-nodes-info.html#wxcreateselectorquery)
+VXML中不支持html中的获取节点方法，使用小程序封装的方法 进行获取[点我跳转](https://mp.weixin.qq.com/debug/wxadoc/dev/api/wxml-nodes-info.html#wxcreateselectorquery)
 支持的富文本标签,通过使用<rich-text>[标签列表](https://mp.weixin.qq.com/debug/wxadoc/dev/component/rich-text.html)
 #### 1.2.1 需要注意的组件
 1. image组件，图片组件模式有13种，4种缩放，9种裁剪方式，支持图片懒加载。
 2. camera相机组件，需要用户授权的组件.
+
 ### 1.3 WXSS 样式
 样式文件，语法与常用css基本一致，但其中还是有几点不同:
 1. 新增尺寸单位rpx
@@ -32,6 +33,8 @@ VXML中不支持html中的获取节点方法，使用小程序封装的方法进
 ## 2 生命周期
 ### 2.1 小程序生命周期函数
 ![](./images/app.jpg)
+用户点击左上角关闭或者点击home键离开微信，小程序并没有直接销毁。只有小程序进入后台一段时间或者系统资源占用过高才会被正在销毁
+
 *顺便说一下全局变量的使用方式，页面中调用getApp()，获取全局对象，所有的数据都为对象属性*
 
 ### 2.2 页面生命周期函数
@@ -45,20 +48,21 @@ VXML中不支持html中的获取节点方法，使用小程序封装的方法进
 这个版本的小程序，已经进行了超级进化，不仅对应用开放了更多的权限，而且对于开发者来言变得更加友好。同时还有一个好消息就是，书写时支持es6语法。
 ### 4.1 支持能力
 1. 上传与下载文件可以直接传到开发者服务器，而不像公众号web开发中需要经过微信服务器进行转发处理.[详情点我](https://mp.weixin.qq.com/debug/wxadoc/dev/api/network-file.html#wxuploadfileobject)
-2. 支持常规request请求和websocket，单需要注意的时request请求的接口地址必须是支持https证书认证同时需要在小程序后台进行请求安全域名配置，websocket同样需要进行相同的配置，只是接口必须为wxs协议[详情点我](https://mp.weixin.qq.com/debug/wxadoc/dev/api/network-socket.html#wxconnectsocketobject)
+2. 支持常规request请求和websocket，但需要注意的时request请求的接口地址必须是支持https证书认证同时需要在小程序后台进行请求安全域名配置，websocket同样需要进行相同的配置，只是接口必须为wxs协议[详情点我](https://mp.weixin.qq.com/debug/wxadoc/dev/api/network-socket.html#wxconnectsocketobject)
 3. 多媒体控制，包括语音，视频，录音以及相机，常用的sdk都具备。
 4. 支持获取地理位置。
 5. 系统信息。包括品牌，型号，像素比，微信版本号，操作系统和基础库版本等。
 6. 网络状态，可以识别 wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
 7. 加速度计以及罗盘，加速度为三维运动，比如晃动旋转（此处似乎知道手机小黄人晃动，眼睛跟着转动是可以根据这个实现）
-8. 拨打电话，传递一个字符串，调用手机拨打电话
+8. 拨打电话，传递一个字符串，调用手机拨打电话 *获取用户微信号绑定手机号需要认证小程序*
 9. 控制剪贴板 实现点击复制和获取剪贴板内容。
 10. 蓝牙控制，iBeacon控制（这个不知道是什么）和屏幕亮度控制。
-11. 用户截屏时间监听
+11. 用户截屏事件监听
 12. 控制手机振动，nfc和wifi。
+13. 小程序页面控制转发，提供onShareAppMessage方法，当定义该方法后，右上角才会显示转发按钮，该方法返回两个参数，一个为标题，一个为页面路路由
 
 ### 4.2 自定义组件
-从小程序基础库版本 1.6.3 开始，小程序支持组件化变成。
+从小程序基础库版本 1.6.3 开始，小程序支持组件化编程。
 
 #### 4.2.1 自定义组件的结构与页面一致，同时具备json wxml wxss js 4个文件，需要注意以下几点：
 1. 编写组件，需要在组件json文件中进行组件声明，
@@ -228,6 +232,11 @@ Component({
 
 ### 4.3 工具
 小程序上传代码后支持预览和体验功能，有两种方式，一种是后台扫描二维码，而另一种则为使用小程序开发助手。当然所有的前提则为你个人微信号对于这个小程序是有权限的。
+
+##框架
+1. wepy腾讯开源小程序框架，vue风格，支持引入npm包，支持Promise，支持Less/Sass/Stylus、Babel/Typescript，支持Sourcemap，ESLint[点我跳转](https://github.com/Tencent/wepy)
+2. mpvue（美团开源小程序框架）框架基于 Vue.js 核心，mpvue 修改了 Vue.js 的 runtime 和 compiler 实现，使其可以运行在小程序环境中[点我跳转](https://github.com/Meituan-Dianping/mpvue)
+3. grace
 
 ## 小知识点
 1. 地图组件为原生组件，层级为最高，使用绝对定位和zindex是无法实现在地图上覆盖一层。
