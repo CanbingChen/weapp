@@ -235,8 +235,38 @@ Component({
   }
 })
   ```
+### 组件数据通信
+1. 组件传出数据到主页面（通过自定义事件）
+和vue类似，小程序组件交互使用自定义事件进行传递，在组件中触发自定义事件，主页面在组件上绑定事件来接受自定义事件。
 
+主页面
+```
+<component-tag-name bindmyevent="onMyEvent" />
 
+Page({
+  onMyEvent: function(e){
+    e.detail // 自定义组件触发事件时提供的detail对象
+  }
+})
+```
+组件
+```
+<button bindtap="onTap">点击这个按钮将触发“myevent”事件</button>
+//myEventDetail为提供给主页面对象，
+//myEventOption配置分别为bubbles是否冒泡，composed事件是否穿越组件边界，bubbles是否具有捕获阶段（捕获截断位于冒泡之前，事件到达节点的顺序与冒泡相反，由父级到子级）
+Component({
+  properties: {}
+  methods: {
+    onTap: function(){
+      var myEventDetail = {} // detail对象，提供给事件监听函数
+      var myEventOption = {} // 触发事件的选项
+      this.triggerEvent('myevent', myEventDetail, myEventOption)
+    }
+  }
+})
+```
+2. 小程序中双向设置了relation之后，可以通过获取组件实例的方式获取组件实例，通过setData方式修改该组件数据。
+*敲黑板，画重点，只有建立关系的组件才可以互相访问，修改对方属性，关系如之前提到的一样，只允许两组*
 #### Tips
 1. WXML节点标签名只能是小写字母、中划线和下划线的组合，所以自定义组件的标签名也只能包含这些字符
 2. 自定义组件也是可以引用自定义组件的，引用方法类似于页面引用自定义组件的方式
